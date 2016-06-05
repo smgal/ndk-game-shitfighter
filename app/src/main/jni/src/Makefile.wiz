@@ -1,0 +1,67 @@
+#.SUFFIXES : .cpp .o
+
+CROSS_COMPILE  = arm-linux-
+
+CXX            = $(CROSS_COMPILE)g++
+
+DIR_ROOT       = ..
+C_SDK     = /cygdrive/c/cygwin/home/smgal_work/DGE
+
+DIR_AVEJ_LITE  = $(DIR_ROOT)/avej_lite
+DIR_APP        = ./src
+
+OBJ_AVEJ_LITE  = \
+                 $(DIR_AVEJ_LITE)/avej_util_tga_decoder.o \
+                 $(DIR_AVEJ_LITE)/avej_sound_mixer.o \
+                 $(DIR_AVEJ_LITE)/adaptation/avej_main.o \
+                 $(DIR_AVEJ_LITE)/adaptation/avej_app_impl.o \
+                 $(DIR_AVEJ_LITE)/adaptation/avej_gfx_impl.o \
+                 $(DIR_AVEJ_LITE)/adaptation/avej_util_impl.o \
+                 $(DIR_AVEJ_LITE)/adaptation/gfx3d_opengl.o \
+                 $(DIR_AVEJ_LITE)/adaptation/gfx3d_opengl_osal.o
+
+OBJ_APP        = \
+                 $(DIR_APP)/sf_main.o \
+                 $(DIR_APP)/sf_map.o \
+                 $(DIR_APP)/sf_gfx.o \
+                 $(DIR_APP)/sf_obj.o \
+                 $(DIR_APP)/sf_obj_enemy.o \
+                 $(DIR_APP)/sf_obj_friend.o \
+                 $(DIR_APP)/sf_res.o \
+                 $(DIR_APP)/sf_state_ending_bad.o \
+                 $(DIR_APP)/sf_state_ending_happy.o \
+                 $(DIR_APP)/sf_state_game_play.o \
+                 $(DIR_APP)/sf_state_menu_about.o \
+                 $(DIR_APP)/sf_state_menu_option.o \
+                 $(DIR_APP)/sf_state_menu_story.o \
+                 $(DIR_APP)/sf_state_title.o \
+                 $(DIR_APP)/sf_sys_desc.o \
+                 $(DIR_APP)/sf_util.o \
+                 $(DIR_APP)/util_convert_to_ucs.o \
+                 $(DIR_APP)/util_convert_to_ucs_table.o \
+                 $(DIR_APP)/util_render_text.o \
+                 $(DIR_APP)/res_shit_img.o \
+                 $(DIR_APP)/res_map.o \
+                 $(DIR_APP)/res_story.o
+
+OBJS           = $(OBJ_AVEJ_LITE) $(OBJ_APP)
+
+TARGET         = bin/shitfigh_wiz.gpe
+
+CXXFLAGS       = -DTARGET_DEVICE=TARGET_GP2XWIZ -fshort-wchar
+CXXFLAGS      += -fPIC -O2 -Wall
+CXXFLAGS      += -I$(DIR_ROOT)/external/wiz -I$(DIR_ROOT) -I$(C_SDK)/SDLLIB/include
+
+LFLAGS         = -L$(DIR_ROOT)/external/wiz -s -L$(C_SDK)/SDLLIB/lib
+LIBS           = -lSDL -lopengles_lite -lgles_port -lm -lc
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) -o $@ $^ $(LFLAGS) $(LIBS)
+	@echo ""
+	@echo "----- All done."
+	@echo ""
+
+clean:
+	rm -f $(OBJS) $(TARGET)
