@@ -75,7 +75,7 @@ namespace menu_story
 
 		if (text_res.IsValid())
 		{
-			const unsigned long COLOR_TABLE[4] =
+			static unsigned long COLOR_TABLE[4] =
 			{
 				0xFFFFFFFF, 0xFF80FFBF, 0xFFC080FF, 0xFFFF80BF
 			};
@@ -103,7 +103,7 @@ namespace menu_story
 					s[len--] = 0;
 
 					color_index = clamp(color_index, 0UL, (unsigned long)(sizeof(COLOR_TABLE) / sizeof(COLOR_TABLE[0])));
-					s_string_list.push_back(std::make_pair<unsigned long, STD_STRING>(COLOR_TABLE[color_index], s));
+					s_string_list.push_back(std::make_pair(COLOR_TABLE[color_index], s));
 				}
 				else
 				{

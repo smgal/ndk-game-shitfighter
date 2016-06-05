@@ -929,8 +929,8 @@ bool s_InRange(int x, int y, const TPos& pos, int min, int max)
 }
 
 #if 1
-const int WIDTH  = 1280;
-const int HEIGHT = 720;
+const int WIDTH  = 1280 * 2;
+const int HEIGHT = 720 * 2;
 #else
 const int WIDTH  = 2560;
 const int HEIGHT = 1440;

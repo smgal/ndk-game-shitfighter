@@ -131,7 +131,6 @@ FILE* g_fileOpen(const char* sz_file_name, unsigned int* out_start_offset, unsig
 	{
 		return NULL;
 	}
-
 }
 
 typedef struct zip_file zip_file;

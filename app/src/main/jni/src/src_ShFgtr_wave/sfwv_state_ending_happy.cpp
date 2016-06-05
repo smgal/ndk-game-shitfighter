@@ -133,7 +133,7 @@ namespace ending_happy
 					s[len--] = 0;
 
 					color_index = clamp(color_index, 0UL, (unsigned long)(sizeof(COLOR_TABLE) / sizeof(COLOR_TABLE[0])));
-					s_string_list.push_back(std::make_pair<unsigned long, STD_STRING>(COLOR_TABLE[color_index], s));
+					s_string_list.push_back(std::make_pair(COLOR_TABLE[color_index], s));
 				}
 				else
 				{

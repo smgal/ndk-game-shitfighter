@@ -144,8 +144,10 @@ public:
 		g_p_gfx_device->GetSurface(&g_p_back_buffer);
 
 		// load resources
-		//if (!g_p_gfx_device->CreateSurfaceFrom("shit_img_1024.tga", &g_p_res_sprite))
+		#if defined(_MSC_VER)
+		if (!g_p_gfx_device->CreateSurfaceFrom("shit_img_1024.tga", &g_p_res_sprite))
 //		if (!g_p_gfx_device->CreateSurfaceFrom("res_ShitFighter_Wave/shit_img_1024.tga", &g_p_res_sprite))
+		#endif
 		{
 			if (!g_p_gfx_device->CreateSurfaceFrom(p_res_shit_img, sizeof_p_res_shit_img(), &g_p_res_sprite))
 			{

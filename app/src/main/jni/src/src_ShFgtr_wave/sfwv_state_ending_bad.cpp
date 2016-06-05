@@ -121,11 +121,11 @@ namespace ending_bad
 					s[len--] = 0;
 
 					color_index = clamp(color_index, 0UL, 3UL);
-					s_string_list.push_back(std::make_pair<unsigned long, STD_STRING>(COLOR_TABLE[color_index], s));
+					s_string_list.push_back(std::make_pair(COLOR_TABLE[color_index], s));
 				}
 				else
 				{
-					s_string_list.push_back(std::make_pair<unsigned long, STD_STRING>(0, TCHAR("")));
+					s_string_list.push_back(std::make_pair(0, TCHAR("")));
 				}
 			}
 		}

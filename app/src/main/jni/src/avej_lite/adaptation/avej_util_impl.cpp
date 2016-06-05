@@ -630,6 +630,13 @@ namespace avej_lite
 			file_name += s_app_path2;
 			file_name += sz_file_name;
 
+			if (!target::file_io::fileExists(sz_file_name))
+			{
+    			__android_log_print(ANDROID_LOG_DEBUG, "SMGAL", "[SMGAL] file not found(%s)", (const char*)file_name);
+    			this->m_is_available = false;
+    			return;
+   			}
+
 			__android_log_print(ANDROID_LOG_DEBUG, "SMGAL", "[SMGAL] file to read(%s)", (const char*)file_name);
 
 			target::file_io::createBufferFromCompressedFile(file_name, &m_p_impl->m_p_buffer, &m_p_impl->m_buffer_length);
