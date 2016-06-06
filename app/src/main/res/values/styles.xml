@@ -16,4 +16,13 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+
+    <style name="image_button_clickable">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:soundEffectsEnabled">false</item>
+        <item name="android:background">#A8FFFFFF</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 </resources>

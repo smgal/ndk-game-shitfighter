@@ -861,6 +861,7 @@ const int NUM_KEY = 7;
 namespace
 {
 	TMultiTouchInfoArray s_multi_touch_info_array;
+	int  g_key_pressed_immediately = INPUT_KEY_MAX;
 
 	bool g_key_state[NUM_KEY];
 	bool g_key_pressed[NUM_KEY];
@@ -878,6 +879,16 @@ namespace target
 		s_multi_touch_info_array[index].y = y;
 
 		// dlog_print(DLOG_ERROR, "SMGAL", "(%d) - (%3i %3i)", index, x, y);
+	}
+
+	void setKeyPressed(int id)
+	{
+		g_key_pressed_immediately = id;
+	}
+
+	void setKeyReleased(int id)
+	{
+		g_key_pressed_immediately = INPUT_KEY_MAX;
 	}
 
 	void setTouchRegionCallback(unsigned int (*fn_callback)(int x, int y))
@@ -929,8 +940,8 @@ bool s_InRange(int x, int y, const TPos& pos, int min, int max)
 }
 
 #if 1
-const int WIDTH  = 1280 * 2;
-const int HEIGHT = 720 * 2;
+const int WIDTH  = 800;
+const int HEIGHT = 480;
 #else
 const int WIDTH  = 2560;
 const int HEIGHT = 1440;
@@ -998,6 +1009,10 @@ void CInputDevice::UpdateInputState()
 		g_key_state[i] = false;
 	}
 
+	if (g_key_pressed_immediately != INPUT_KEY_MAX)
+	if (g_key_pressed_immediately >= 0 && g_key_pressed_immediately < INPUT_KEY_MAX)
+		g_key_state[g_key_pressed_immediately] = true;
+
 	for (int i = 0; i < 2; i++)
 	{
 		int x = s_multi_touch_info_array[i].x;
@@ -1033,8 +1048,10 @@ void CInputDevice::UpdateInputState()
 		}
 
 		if (s[0])
-			__android_log_print(ANDROID_LOG_DEBUG, "SMGAL", "pressed: %s", s);
+			__android_log_print(ANDROID_LOG_DEBUG, "SMGAL", "[LOW] pressed: %s", s);
 	}
+
+
 /*
 	if (s_native_pressed_x >= 0 && s_native_pressed_y >= 0)
 	{

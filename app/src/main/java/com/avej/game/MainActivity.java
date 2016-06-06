@@ -9,67 +9,18 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.avej.game.shitfighter.BuildConfig;
+import com.avej.game.shitfighter.R;
 
 import java.io.File;
 
 import static com.avej.game.SmUtil.LOGI;
-
-class SmConfig
-{
-	static int BUFFER_WIDTH = 1280;
-	static int BUFFER_HEIGHT = 720;
-
-	static String PACKAGE_NAME;
-	static String PACKAGE_APK_PATH;
-	static String PACKAGE_DATA_PATH;
-	static String APP_NAME;
-}
-
-class SmType
-{
-	public static class SystemDesc
-	{
-		int screen_width;
-		int screen_height;
-		int buffer_width;
-		int buffer_height;
-	}
-}
-
-class SmRes
-{
-	static Activity main_activity;
-	static Context context;
-
-	////////////////////////////////////////////////////////////////////////////
-	// system variables
-
-	static SmType.SystemDesc system_desc = new SmType.SystemDesc();
-/*
-	static boolean is_terminating = false;
-	static long    start_time = 0;
-*/
-}
-
-class SmUtil
-{
-	public static void LOGD(String s)
-	{
-		if (BuildConfig.DEBUG)
-			android.util.Log.d("[AVEJ_JAVA]", s);
-	}
-
-	public static void LOGI(String s)
-	{
-		android.util.Log.i("[AVEJ_JAVA]", s);
-	}
-}
 
 public class MainActivity extends Activity
 {
@@ -111,10 +62,15 @@ public class MainActivity extends Activity
 			SmRes.system_desc.screen_height = SCREEN_HEIGHT;
 			SmRes.system_desc.buffer_width  = SmConfig.BUFFER_WIDTH;
 			SmRes.system_desc.buffer_height = SmConfig.BUFFER_HEIGHT;
+
+			SmRes.src_rect.set(0, 0, SmRes.system_desc.buffer_width, SmRes.system_desc.buffer_height);
+			SmRes.dst_rect.set(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+			SmRes.scaling_factor_x = 1.0 * SmRes.src_rect.width() / SmRes.dst_rect.width();
+			SmRes.scaling_factor_y = 1.0 * SmRes.src_rect.height() / SmRes.dst_rect.height();
 		}
 
-		m_main_view = new MainView(this);
-		setContentView(m_main_view);
+		setContentView(R.layout.main_activity);
+		m_main_view = (MainView)findViewById(R.id.main_view);
 	}
 
 	@Override
@@ -151,12 +107,51 @@ class MainView extends GLSurfaceView
 		setRenderer(m_renderer);
 	}
 
+	public MainView(Context context, AttributeSet attrib_set, int defStyle)
+	{
+		super(context, attrib_set);
+
+		m_renderer = new MainRenderer();
+		setRenderer(m_renderer);
+	}
+
+	public MainView(Context context, AttributeSet attrib_set) {
+
+		super(context, attrib_set);
+
+		m_renderer = new MainRenderer();
+		setRenderer(m_renderer);
+	}
+
 	public boolean onTouchEvent(final MotionEvent event)
 	{
+		int motion_event = event.getAction();
+
+		if (motion_event == MotionEvent.ACTION_DOWN)
+		{
+			int ax = (int)event.getX();
+			int ay = (int)event.getY();
+
+			SmRes.input_buffer.press(ax, ay);
+		}
+		else if (motion_event == MotionEvent.ACTION_MOVE)
+		{
+			int ax = (int)event.getX();
+			int ay = (int)event.getY();
+
+			SmRes.input_buffer.press(ax, ay);
+		}
+		else if (motion_event == MotionEvent.ACTION_UP)
+		{
+			SmRes.input_buffer.release();
+		}
+
+		return true;
+/*
 		int action = event.getAction();
 
-		float x = event.getX();
-		float y = event.getY();
+		int x = (int)event.getX();
+		int y = (int)event.getY();
 
 		switch (action)
 		{
@@ -175,6 +170,7 @@ class MainView extends GLSurfaceView
 		}
 
 		return true;
+*/
 	}
 
 	@Override
@@ -223,6 +219,57 @@ class MainRenderer implements GLSurfaceView.Renderer
 	
 	public void onDrawFrame(GL10 gl)
 	{
+		this.process();
 		SmJNI.render();
+	}
+
+	public void process()
+	{
+		if (SmRes.input_buffer.action_type == SmRes.InputBuffer.ACTION_TYPE.NONE)
+			return;
+
+		boolean result = false;
+
+		long time_ms = System.currentTimeMillis() - SmRes.start_time;
+
+		switch (SmRes.input_buffer.action_type)
+		{
+			case TOUCH_DOWN:
+				int revised_touch_x = SmRes.input_buffer.touch_x;
+				int revised_touch_y = SmRes.input_buffer.touch_y;
+
+				if (revised_touch_x >= 0 && revised_touch_y >= 0 )
+				{
+					revised_touch_x -= SmRes.dst_rect.left;
+					revised_touch_y -= SmRes.dst_rect.top;
+
+					revised_touch_x = (int)((double)revised_touch_x * SmRes.scaling_factor_x);
+					revised_touch_y = (int)((double)revised_touch_y * SmRes.scaling_factor_y);
+				}
+
+				SmJNI.process(SmJNI.ACTION_TYPE_TOUCH_DOWN, revised_touch_x, revised_touch_y);
+				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_TOUCH_DOWN, revised_touch_x, revised_touch_y);
+				break;
+
+			case TOUCH_UP:
+				SmJNI.process(SmJNI.ACTION_TYPE_TOUCH_UP, 0, 0);
+				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_TOUCH_UP, 0, 0);
+				break;
+
+			case KEY_DOWN:
+				SmJNI.process(SmJNI.ACTION_TYPE_KEY_DOWN, SmRes.input_buffer.key, 0);
+				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_KEY_DOWN, SmRes.input_buffer.key, 0);
+				break;
+
+			case KEY_UP:
+				SmJNI.process(SmJNI.ACTION_TYPE_KEY_UP, SmRes.input_buffer.key, 0);
+				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_KEY_UP, SmRes.input_buffer.key, 0);
+				break;
+		}
+
+		SmRes.input_buffer.reset();
+
+		if (!result)
+			SmRes.is_terminating = true;
 	}
 }

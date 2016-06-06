@@ -413,7 +413,8 @@ namespace game_play
 				gfx_ix::DrawText_x2(i*12, 85, GetSysDesc().stage.message.Get(), TIndexColor(11));
 			}
 
-			gui::CButtonGroupFull::Show();
+			//gui::CButtonGroupFull::Show();
+			gui::CButtonGroup::Show();
 
 			// flip the screen
 			g_p_gfx_device->EndDraw();

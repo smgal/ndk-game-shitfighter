@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.avej.game.MainView
+        android:id="@+id/main_view"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:stretchColumns="0"
+        android:background="@android:color/transparent" >
+        <!--        android:layout_below="@id/sm_view" -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <View
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag="B"
+                android:background="#FF0000" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag="8"
+                android:src="@drawable/btn_arrow_up_selector" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag="A"
+                android:background="#0000FF" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <View
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag='4'
+                android:src="@drawable/btn_arrow_left_selector" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag='2'
+                android:src="@drawable/btn_arrow_down_selector" />
+            <com.avej.game.WmImageViewButton
+                style="@style/image_button_clickable"
+                android:tag='6'
+                android:src="@drawable/btn_arrow_right_selector" />
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>

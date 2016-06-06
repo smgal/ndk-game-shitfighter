@@ -28,5 +28,6 @@ public class SmJNI
     public static native void render();
     public static native void pause();
     public static native void resume();
-    public static native void process(int action, float x, float y);
+    public static native void process(int action_type, int param_x, int param_y);
+
 }

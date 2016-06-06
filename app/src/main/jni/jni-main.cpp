@@ -62,6 +62,8 @@ namespace glue
 	void render(long current_tick, int width, int height);
 	void onTouchPress(int id, int x, int y);
 	void onTouchRelease(int id);
+	void onKeyPress(int key);
+	void onKeyRelease(int key);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +72,7 @@ namespace glue
 extern "C" JNIEXPORT jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_package_path, jstring sj_data_path, jstring sj_package_name, jstring sj_app_name, jobject j_system_desc);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, resize)(JNIEnv* p_env, jobject obj, jint width, jint height);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, done)(JNIEnv* p_env, jobject obj);
-extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action, jfloat x, jfloat y);
+extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action_type, jint param_x, jint param_y);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, pause)(JNIEnv* p_env, jobject obj);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, resume)(JNIEnv* p_env);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj);
@@ -257,23 +259,25 @@ void DECLARE_JNI_FUNC(SmJNI, done)(JNIEnv* p_env, jobject obj)
 	glue::done();
 }
 
-void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action, jfloat x, jfloat y)
+void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action_type, jint param_x, jint param_y)
 {
-	switch (action)
+	switch (action_type)
 	{
 	case app::InputEvent::TYPE_TOUCH_DOWN:
-		LOG_D("touched(DN) - (%3.2f, %3.2f)", x, y);
-		glue::onTouchPress(0, (int)x, (int)y);
+		LOG_D("[JNI] touched(DN) - (%d, %d)", param_x, param_y);
+		glue::onTouchPress(0, param_x, param_y);
 		break;
 	case app::InputEvent::TYPE_TOUCH_UP:
-		LOG_D("touched(UP) - (%3.2f, %3.2f)", x, y);
+		LOG_D("[JNI] touched(UP)");
 		glue::onTouchRelease(0);
 		break;
 	case app::InputEvent::TYPE_KEY_DOWN:
-		LOG_D("key(DN)");
+		LOG_D("[JNI] key(DN) - ('%c')", (char)param_x);
+		glue::onKeyPress(param_x);
 		break;
 	case app::InputEvent::TYPE_KEY_UP:
-		LOG_D("key(UP)");
+		LOG_D("[JNI] key(UP) - ('%c')", (char)param_x);
+		glue::onKeyRelease(param_x);
 		break;
 	}
 }

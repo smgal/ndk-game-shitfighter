@@ -1,5 +1,6 @@
 
 #include "src/avejapp_register.h"
+#include <avej_app.h>
 
 #include <android/log.h>
 
@@ -18,6 +19,8 @@
 namespace target
 {
 	void setTouchPos(int id, int x, int y);
+	void setKeyPressed(int id);
+	void setKeyReleased(int id);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +71,40 @@ namespace glue
 	void onTouchRelease(int id)
 	{
 		target::setTouchPos(0, -1, -1);
+	}
+
+	void onKeyPress(int key)
+	{
+		int avej_key = avej_lite::INPUT_KEY_MAX;
+
+		switch ((char)key)
+		{
+		case '8':
+		    avej_key = avej_lite::INPUT_KEY_UP;
+		    break;
+		case '2':
+		    avej_key = avej_lite::INPUT_KEY_DOWN;
+		    break;
+		case '4':
+		    avej_key = avej_lite::INPUT_KEY_LEFT;
+		    break;
+		case '6':
+		    avej_key = avej_lite::INPUT_KEY_RIGHT;
+		    break;
+		case 'A':
+		    avej_key = avej_lite::INPUT_KEY_A;
+		    break;
+		case 'B':
+		    avej_key = avej_lite::INPUT_KEY_B;
+		    break;
+		}
+
+		target::setKeyPressed(avej_key);
+	}
+
+	void onKeyRelease(int key)
+	{
+		target::setKeyReleased(key);
 	}
 }
 
