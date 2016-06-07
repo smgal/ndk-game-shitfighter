@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -225,6 +226,12 @@ class MainRenderer implements GLSurfaceView.Renderer
 
 	public void process()
 	{
+		for (int ix = 0; ix < SmRes.input_buffer.key_pressed.size(); ix++)
+		{
+			int key = SmRes.input_buffer.key_pressed.get(ix);
+			SmJNI.process(SmJNI.ACTION_TYPE_KEY_DOWN, key, 0);
+		}
+
 		if (SmRes.input_buffer.action_type == SmRes.InputBuffer.ACTION_TYPE.NONE)
 			return;
 
@@ -255,7 +262,7 @@ class MainRenderer implements GLSurfaceView.Renderer
 				SmJNI.process(SmJNI.ACTION_TYPE_TOUCH_UP, 0, 0);
 				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_TOUCH_UP, 0, 0);
 				break;
-
+/*
 			case KEY_DOWN:
 				SmJNI.process(SmJNI.ACTION_TYPE_KEY_DOWN, SmRes.input_buffer.key, 0);
 				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_KEY_DOWN, SmRes.input_buffer.key, 0);
@@ -265,6 +272,7 @@ class MainRenderer implements GLSurfaceView.Renderer
 				SmJNI.process(SmJNI.ACTION_TYPE_KEY_UP, SmRes.input_buffer.key, 0);
 				//result = SmJNI.process(time_ms, SmJNI.ACTION_TYPE_KEY_UP, SmRes.input_buffer.key, 0);
 				break;
+*/
 		}
 
 		SmRes.input_buffer.reset();

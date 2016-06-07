@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 
+import java.util.ArrayList;
+
 public class SmRes
 {
 	static Activity main_activity;
@@ -62,6 +64,10 @@ public class SmRes
 		boolean just_pressed = false;
 		int     key = 0;
 
+		/////////////////////////
+
+		ArrayList<Character> key_pressed = new ArrayList<Character>();
+
 		void reset()
 		{
 			action_type = ACTION_TYPE.NONE;
@@ -87,12 +93,18 @@ public class SmRes
 		{
 			action_type = ACTION_TYPE.KEY_DOWN;
 			key = (int)_key;
+
+			if (!key_pressed.contains(_key))
+				key_pressed.add(_key);
 		}
 
 		void keyUp(char _key)
 		{
 			action_type = ACTION_TYPE.KEY_UP;
 			key = (int)_key;
+
+			if (key_pressed.contains(_key))
+				key_pressed.remove((Character)_key);
 		}
 	}
 

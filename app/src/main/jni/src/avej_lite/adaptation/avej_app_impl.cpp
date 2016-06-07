@@ -853,6 +853,8 @@ bool CInputDevice::GetMultiTouchInfo(TMultiTouchInfoArray& multi_touch_info_arra
 
 #include <string.h>
 #include <android/log.h>
+#include <vector>
+#include <utility>
 
 using namespace avej_lite;
 
@@ -862,6 +864,7 @@ namespace
 {
 	TMultiTouchInfoArray s_multi_touch_info_array;
 	int  g_key_pressed_immediately = INPUT_KEY_MAX;
+	std::vector<std::pair<bool, int> > g_key_buffer;
 
 	bool g_key_state[NUM_KEY];
 	bool g_key_pressed[NUM_KEY];
@@ -884,11 +887,13 @@ namespace target
 	void setKeyPressed(int id)
 	{
 		g_key_pressed_immediately = id;
+		g_key_buffer.push_back(std::make_pair(true, id));
 	}
 
 	void setKeyReleased(int id)
 	{
 		g_key_pressed_immediately = INPUT_KEY_MAX;
+		g_key_buffer.push_back(std::make_pair(false, id));
 	}
 
 	void setTouchRegionCallback(unsigned int (*fn_callback)(int x, int y))
@@ -939,13 +944,8 @@ bool s_InRange(int x, int y, const TPos& pos, int min, int max)
 	return (distance >= min * min) && (distance >= max * max);
 }
 
-#if 1
 const int WIDTH  = 800;
 const int HEIGHT = 480;
-#else
-const int WIDTH  = 2560;
-const int HEIGHT = 1440;
-#endif
 
 const int HEIGHT_BASE = HEIGHT;
 
@@ -1009,9 +1009,20 @@ void CInputDevice::UpdateInputState()
 		g_key_state[i] = false;
 	}
 
+#if 1
+    if (g_key_buffer.size() > 0)
+    {
+        std::vector<std::pair<bool, int> >::iterator i = g_key_buffer.begin();
+        for ( ; i != g_key_buffer.end(); ++i)
+    		g_key_state[i->second] = i->first;
+
+        g_key_buffer.clear();
+    }
+#else
 	if (g_key_pressed_immediately != INPUT_KEY_MAX)
 	if (g_key_pressed_immediately >= 0 && g_key_pressed_immediately < INPUT_KEY_MAX)
 		g_key_state[g_key_pressed_immediately] = true;
+#endif
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -1050,34 +1061,6 @@ void CInputDevice::UpdateInputState()
 		if (s[0])
 			__android_log_print(ANDROID_LOG_DEBUG, "SMGAL", "[LOW] pressed: %s", s);
 	}
-
-
-/*
-	if (s_native_pressed_x >= 0 && s_native_pressed_y >= 0)
-	{
-		{
-			int x = s_native_pressed_x;
-			int y = s_native_pressed_y;
-
-			// key mapping
-			for (int key = 0; key < NUM_KEY; key++)
-			{
-				g_key_state[key] |= s_InRect(x, y, HIT_RECT[key]);
-			}
-		}
-
-		for (int i = 0; i < NUM_KEY; i++)
-		{
-			if (!key_state_saved[i] && g_key_state[i])
-				g_key_pressed[i] = true;
-		}
-	}
-	else
-	{
-		s_multi_touch_info_array[0].x = -1;
-		s_multi_touch_info_array[0].y = -1;
-	}
-*/
 }
 
 bool CInputDevice::IsKeyHeldDown(TInputKey key) const

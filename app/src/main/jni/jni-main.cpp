@@ -198,19 +198,14 @@ jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_pa
 	p_env->ReleaseStringUTFChars(sj_package_name, sz_package_name);
 	p_env->ReleaseStringUTFChars(sj_data_path, sz_data_path);
 	p_env->ReleaseStringUTFChars(sj_package_path, sz_package_path);
-/*
-	// [ND] temporary -> this values should be determined at apps
+
+#if 0
 	int required_width = 720;
 	int required_height = 1440;
 	{
-		if (strcmp(app_name, "dokyu") == 0)
+		if (strcmp(app_name, "shitfighter") == 0)
 		{
-			required_width = 640;
-			required_height = 400;
-		}
-		else if (strcmp(app_name, "kano") == 0)
-		{
-			required_width = 480;
+			required_width = 800;
 			required_height = 480;
 		}
 		else if (strcmp(app_name, "yunjr") == 0)
@@ -229,15 +224,15 @@ jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_pa
 
 		SET_INT(p_env, jclass_system_desc, j_system_desc, buffer_width, required_width);
 		SET_INT(p_env, jclass_system_desc, j_system_desc, buffer_height, required_height);
-/ *
+/*
 		fid = p_env->GetFieldID(jclass_system_desc, "buffer_width", "I");
 		p_env->SetIntField(j_system_desc, fid, required_width);
 
 		fid = p_env->GetFieldID(jclass_system_desc, "buffer_height", "I");
 		p_env->SetIntField(j_system_desc, fid, required_height);
-* /
-	}
 */
+	}
+#endif
 
 	glue::init();
 
