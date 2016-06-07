@@ -85,32 +85,6 @@ APP_INC_FILES         := -I./$(APP_SRC_DIR) -I./$(APP_UTIL_SRC_DIR) -I./$(APP_AV
 ################################################################################
 ## App Main
 
-APP_PLUTOID_SRC_DIR   := $(APP_SRC_DIR)/src_PlutoidLite
-APP_PLUTOID_SRC_FILES := \
-		$(APP_PLUTOID_SRC_DIR)/gfx3d_device3d.cpp \
-		$(APP_PLUTOID_SRC_DIR)/gfx3d_fvf.cpp \
-		$(APP_PLUTOID_SRC_DIR)/gfx3d_sample.cpp \
-		$(APP_PLUTOID_SRC_DIR)/gfx3d_scene.cpp \
-		$(APP_PLUTOID_SRC_DIR)/gfx3d_util.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_actor_albireo.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_actor_caina_crena.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_actor_oracle.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_actor_the_absolute.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_premotion.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_presentation.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_presentation_base.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_presentation_dream.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_presentation_kano.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_base_world.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_class_console.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_class_simple_tile_map.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_config.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_data_communication.cpp \
-		$(APP_PLUTOID_SRC_DIR)/pd_util.cpp \
-		$(APP_PLUTOID_SRC_DIR)/res_avej_tex1.cpp \
-		$(APP_PLUTOID_SRC_DIR)/res_avej_tex2.cpp \
-		$(APP_PLUTOID_SRC_DIR)/util_fos_map.cpp
-
 APP_SHITFTR_SRC_DIR   := $(APP_SRC_DIR)/src_ShFgtr_wave
 APP_SHITFTR_SRC_FILES := \
 		$(APP_SHITFTR_SRC_DIR)/sfwv_gfx.cpp \
@@ -133,25 +107,7 @@ APP_SHITFTR_SRC_FILES := \
 		$(APP_SHITFTR_SRC_DIR)/sfwv_sys_desc.cpp \
 		$(APP_SHITFTR_SRC_DIR)/sfwv_util.cpp
 
-APP_IQBLOCK_SRC_DIR   := $(APP_SRC_DIR)/src_Block
-APP_IQBLOCK_SRC_FILES := \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_actor.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_actor_game_play.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_actor_main.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_actor_title.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_base_gfx.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_attrib.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_camera.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_fog.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_light.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_projection.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_class_3d_shader.cpp \
-		$(APP_IQBLOCK_SRC_DIR)/iqb_z_util.cpp
-
-APP_SRC_FILES         += $(APP_PLUTOID_SRC_FILES)
 APP_SRC_FILES         += $(APP_SHITFTR_SRC_FILES)
-APP_SRC_FILES         += $(APP_IQBLOCK_SRC_FILES)
 
 ################################################################################
 
