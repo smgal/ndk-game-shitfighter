@@ -10,7 +10,38 @@
         android:layout_height="match_parent"
          />
 
+    <com.avej.game.WmImageViewButton
+        android:id="@+id/gui_button_left"
+        style="@style/image_button_clickable"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:tag='4'
+        android:src="@drawable/btn_arrow_left_selector" />
+    <com.avej.game.WmImageViewButton
+        style="@style/image_button_clickable"
+        android:layout_toRightOf="@id/gui_button_left"
+        android:layout_alignParentBottom="true"
+        android:tag='6'
+        android:src="@drawable/btn_arrow_right_selector" />
+
+    <com.avej.game.WmImageViewButton
+        android:id="@+id/gui_button_up"
+        style="@style/image_button_clickable"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:tag='8'
+        android:src="@drawable/btn_arrow_up_selector" />
+    <com.avej.game.WmImageViewButton
+        style="@style/image_button_clickable"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/gui_button_up"
+        android:tag='2'
+        android:src="@drawable/btn_arrow_down_selector" />
+
+
+
     <TableLayout
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
