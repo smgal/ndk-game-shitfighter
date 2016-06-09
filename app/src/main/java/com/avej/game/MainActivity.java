@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,8 +13,10 @@ import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.avej.game.shitfighter.BuildConfig;
@@ -26,6 +29,9 @@ import static com.avej.game.SmUtil.LOGI;
 public class MainActivity extends Activity
 {
 	private MainView m_main_view;
+
+	private char _prev_control_char_w = ' ';
+	private char _prev_control_char_h = ' ';
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -72,6 +78,84 @@ public class MainActivity extends Activity
 
 		setContentView(R.layout.main_activity);
 		m_main_view = (MainView)findViewById(R.id.main_view);
+
+		ImageView sliderHeightDirection = (ImageView)findViewById(R.id.slider_height_direction);
+		sliderHeightDirection.setOnTouchListener
+		(
+			new View.OnTouchListener()
+			{
+				@Override
+				public boolean onTouch(View v, MotionEvent event)
+				{
+					Rect rect = new Rect();
+					v.getHitRect(rect);
+
+					final float center_x = (rect.right + rect.left) / 2.0f;
+					final float center_y = (rect.bottom + rect.top) / 2.0f;
+
+					int action = event.getAction();
+
+					if (action == MotionEvent.ACTION_CANCEL)
+						action = MotionEvent.ACTION_UP;
+					if (action == MotionEvent.ACTION_OUTSIDE)
+						action = MotionEvent.ACTION_OUTSIDE;
+
+					char control_char = (event.getRawY() < center_y) ? '8' : '2';
+
+					if (_prev_control_char_h != ' ' && _prev_control_char_h != control_char)
+					{
+						SmUtil.processTouchButton(MotionEvent.ACTION_UP, _prev_control_char_h);
+						SmUtil.processTouchButton(MotionEvent.ACTION_DOWN, control_char);
+					}
+
+					_prev_control_char_h = (action != MotionEvent.ACTION_UP) ? control_char : ' ';
+
+					if (SmUtil.processTouchButton(action, control_char))
+						return true;
+
+					return false;
+				}
+			}
+		);
+
+		ImageView sliderWidthDirection = (ImageView)findViewById(R.id.slider_width_direction);
+		sliderWidthDirection.setOnTouchListener
+		(
+			new View.OnTouchListener()
+			{
+				@Override
+				public boolean onTouch(View v, MotionEvent event)
+				{
+					Rect rect = new Rect();
+					v.getHitRect(rect);
+
+					final float center_x = (rect.right + rect.left) / 2.0f;
+					final float center_y = (rect.bottom + rect.top) / 2.0f;
+
+					int action = event.getAction();
+
+					if (action == MotionEvent.ACTION_CANCEL)
+						action = MotionEvent.ACTION_UP;
+					if (action == MotionEvent.ACTION_OUTSIDE)
+						action = MotionEvent.ACTION_OUTSIDE;
+
+					char control_char = (event.getRawX() < center_x) ? '4' : '6';
+
+					if (_prev_control_char_w != ' ' && _prev_control_char_w != control_char)
+					{
+						SmUtil.processTouchButton(MotionEvent.ACTION_UP, _prev_control_char_w);
+						SmUtil.processTouchButton(MotionEvent.ACTION_DOWN, control_char);
+					}
+
+					_prev_control_char_w = (action != MotionEvent.ACTION_UP) ? control_char : ' ';
+
+					if (SmUtil.processTouchButton(action, control_char))
+						return true;
+
+					return false;
+				}
+			}
+		);
 	}
 
 	@Override
