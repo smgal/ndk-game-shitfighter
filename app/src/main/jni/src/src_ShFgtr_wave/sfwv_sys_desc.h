@@ -53,6 +53,7 @@ namespace miku
 		TPlayerMode GetPlayerMode(void) const;
 		void        SetPlayerMode(TPlayerMode player_mode);
 
+		void        SetAutoShot(bool auto_shot);
 		bool        IsAutoShot(void) const;
 
 	private:

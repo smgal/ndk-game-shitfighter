@@ -12,19 +12,41 @@
 
     <ImageView
         android:id="@+id/slider_width_direction"
+        android:tag="-"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:background="#800000FF"
+        android:background="#200000FF"
         />
     <ImageView
         android:id="@+id/slider_height_direction"
+        android:tag="|"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_width="100dp"
         android:layout_height="300dp"
-        android:background="#800000FF"
+        android:background="#200000FF"
+        />
+    <com.avej.game.WmImageViewButton
+        android:id="@+id/button_B"
+        style="@style/image_button_clickable"
+        android:tag="B"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#20FF00FF"
+        />
+    <com.avej.game.WmImageViewButton
+        android:id="@+id/button_A"
+        style="@style/image_button_clickable"
+        android:tag="A"
+        android:layout_toRightOf="@id/button_B"
+        android:layout_alignParentTop="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#20FFFF00"
         />
 
     <TableLayout

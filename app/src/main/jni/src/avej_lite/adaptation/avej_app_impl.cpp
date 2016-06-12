@@ -863,10 +863,10 @@ const int NUM_KEY = 7;
 namespace
 {
 	TMultiTouchInfoArray s_multi_touch_info_array;
-	int  g_key_pressed_immediately = INPUT_KEY_MAX;
 	std::vector<std::pair<bool, int> > g_key_buffer;
 
 	bool g_key_state[NUM_KEY];
+	bool g_key_pressing[NUM_KEY];
 	bool g_key_pressed[NUM_KEY];
 
 	unsigned int (*s_fn_touch_region_callback)(int x, int y) = 0;
@@ -886,13 +886,11 @@ namespace target
 
 	void setKeyPressed(int id)
 	{
-		g_key_pressed_immediately = id;
 		g_key_buffer.push_back(std::make_pair(true, id));
 	}
 
 	void setKeyReleased(int id)
 	{
-		g_key_pressed_immediately = INPUT_KEY_MAX;
 		g_key_buffer.push_back(std::make_pair(false, id));
 	}
 
@@ -907,6 +905,7 @@ CInputDevice::CInputDevice()
 	for (int i = 0; i < NUM_KEY; i++)
 	{
 		g_key_state[i] = false;
+		g_key_pressing[i] = false;
 		g_key_pressed[i] = false;
 	}
 }
@@ -1009,7 +1008,6 @@ void CInputDevice::UpdateInputState()
 		g_key_state[i] = false;
 	}
 
-#if 1
     if (g_key_buffer.size() > 0)
     {
         std::vector<std::pair<bool, int> >::iterator i = g_key_buffer.begin();
@@ -1018,11 +1016,6 @@ void CInputDevice::UpdateInputState()
 
         g_key_buffer.clear();
     }
-#else
-	if (g_key_pressed_immediately != INPUT_KEY_MAX)
-	if (g_key_pressed_immediately >= 0 && g_key_pressed_immediately < INPUT_KEY_MAX)
-		g_key_state[g_key_pressed_immediately] = true;
-#endif
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -1033,12 +1026,21 @@ void CInputDevice::UpdateInputState()
 		{
 			for (int key = 0; key < NUM_KEY; key++)
 				g_key_state[key] |= s_InRect(x, y, HIT_RECT[key]);
+		}
+	}
 
-			for (int i = 0; i < NUM_KEY; i++)
-			{
-				if (!key_state_saved[i] && g_key_state[i])
-					g_key_pressed[i] = true;
-			}
+	for (int i = 0; i < NUM_KEY; i++)
+	{
+		if (!key_state_saved[i] && g_key_state[i])
+			g_key_pressing[i] = true;
+	}
+
+	for (int i = 0; i < NUM_KEY; i++)
+	{
+		if (g_key_pressing[i] && !g_key_state[i])
+		{
+			g_key_pressed[i] = true;
+			g_key_pressing[i] = false;
 		}
 	}
 

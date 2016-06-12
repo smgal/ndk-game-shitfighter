@@ -184,28 +184,33 @@ public class MainActivity extends Activity
 class MainView extends GLSurfaceView
 {
 	MainRenderer m_renderer;
+
+	private void _init()
+	{
+		m_renderer = new MainRenderer();
+
+		this.setEGLContextClientVersion(1);
+		this.setPreserveEGLContextOnPause(true);
+
+		this.setRenderer(m_renderer);
+	}
 	
 	public MainView(Context context)
 	{
 		super(context);
-		m_renderer = new MainRenderer();
-		setRenderer(m_renderer);
+		_init();
 	}
 
 	public MainView(Context context, AttributeSet attrib_set, int defStyle)
 	{
 		super(context, attrib_set);
-
-		m_renderer = new MainRenderer();
-		setRenderer(m_renderer);
+		_init();
 	}
 
 	public MainView(Context context, AttributeSet attrib_set) {
 
 		super(context, attrib_set);
-
-		m_renderer = new MainRenderer();
-		setRenderer(m_renderer);
+		_init();
 	}
 
 	public boolean onTouchEvent(final MotionEvent event)
@@ -275,26 +280,31 @@ class MainView extends GLSurfaceView
 
 class MainRenderer implements GLSurfaceView.Renderer
 {
+	private boolean _is_first = true;
+
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		boolean app_found = SmJNI.init(SmConfig.PACKAGE_APK_PATH, SmConfig.PACKAGE_DATA_PATH, SmConfig.PACKAGE_NAME, SmConfig.APP_NAME, SmRes.system_desc);
-		//boolean app_found = SmJNI.init(SmConfig.PACKAGE_APK_PATH);
-
-		if (!app_found)
+		if (_is_first)
 		{
-			LOGI("<" + SmConfig.APP_NAME + "> not found");
+			boolean app_found = SmJNI.init(SmConfig.PACKAGE_APK_PATH, SmConfig.PACKAGE_DATA_PATH, SmConfig.PACKAGE_NAME, SmConfig.APP_NAME, SmRes.system_desc);
 
-			Toast.makeText(SmRes.context, "<" + SmConfig.APP_NAME + "> not found", Toast.LENGTH_LONG).show();
-			SmRes.main_activity.finish();
+			if (!app_found) {
+				LOGI("<" + SmConfig.APP_NAME + "> not found");
 
-			return;
+				Toast.makeText(SmRes.context, "<" + SmConfig.APP_NAME + "> not found", Toast.LENGTH_LONG).show();
+				SmRes.main_activity.finish();
+
+				return;
+			}
+
+			SmConfig.BUFFER_WIDTH = SmRes.system_desc.buffer_width;
+			SmConfig.BUFFER_HEIGHT = SmRes.system_desc.buffer_height;
+
+			LOGI("Screen resolution is (" + String.valueOf(SmRes.system_desc.screen_width) + " x " + String.valueOf(SmRes.system_desc.screen_height) + ")");
+			LOGI("Buffer size is (" + String.valueOf(SmRes.system_desc.buffer_width) + " x " + String.valueOf(SmRes.system_desc.buffer_height) + ")");
+
+			_is_first = false;
 		}
-
-		SmConfig.BUFFER_WIDTH  = SmRes.system_desc.buffer_width;
-		SmConfig.BUFFER_HEIGHT = SmRes.system_desc.buffer_height;
-
-		LOGI("Screen resolution is (" + String.valueOf(SmRes.system_desc.screen_width) + " x " + String.valueOf(SmRes.system_desc.screen_height) + ")");
-		LOGI("Buffer size is (" + String.valueOf(SmRes.system_desc.buffer_width) + " x " + String.valueOf(SmRes.system_desc.buffer_height) + ")");
 	}
 	
 	public void onSurfaceChanged(GL10 gl, int w, int h)
@@ -365,3 +375,4 @@ class MainRenderer implements GLSurfaceView.Renderer
 			SmRes.is_terminating = true;
 	}
 }
+

@@ -71,6 +71,11 @@ void TSysDesc::SetPlayerMode(TPlayerMode player_mode)
 	}
 }
 
+void TSysDesc::SetAutoShot(bool auto_shot)
+{
+	s_auto_shot = auto_shot;
+}
+
 bool TSysDesc::IsAutoShot(void) const
 {
 	return s_auto_shot;

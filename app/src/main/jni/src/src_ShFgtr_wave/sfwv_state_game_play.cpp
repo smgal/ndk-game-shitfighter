@@ -151,7 +151,7 @@ namespace game_play
 			delete objects[i];
 			objects[i] = 0;
 		}
-		// TEnemy�� �Ҹ��ڿ��� ��� object�� �ٽ� ����
+		
 		for (i = 0; i <= MAX_ENEMY; i++)
 		{
 			delete objects[i];
@@ -201,9 +201,7 @@ namespace game_play
 		input_device.UpdateInputState();
 
 		{
-			bool has_pressed_exit_key;
-			
-			has_pressed_exit_key = input_device.WasKeyPressed(avej_lite::INPUT_KEY_SYS1);
+			bool has_pressed_exit_key = input_device.WasKeyPressed(avej_lite::INPUT_KEY_SYS1);
 
 			if (has_pressed_exit_key)
 			{
@@ -216,6 +214,10 @@ namespace game_play
 				return false;
 			}
 		}
+
+		// AutoShot option is global setting
+		if (input_device.WasKeyPressed(avej_lite::INPUT_KEY_A))
+			SetSysDesc().SetAutoShot(!GetSysDesc().IsAutoShot());
 
 		// process objects
 		map.Move(SCROLL_SPEED, 0);
@@ -414,7 +416,7 @@ namespace game_play
 			}
 
 			//gui::CButtonGroupFull::Show();
-			gui::CButtonGroup::Show();
+			//gui::CButtonGroup::Show();
 
 			// flip the screen
 			g_p_gfx_device->EndDraw();

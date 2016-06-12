@@ -300,8 +300,9 @@ static bool s_Initialize(void* h_window)
 
 	SetTextBufferDesc(24, 1024*3/4);
 
-//	p_system = new CSystem(STATE_TITLE);
-	p_system = new CSystem(STATE_GAME_PLAY);
+	p_system = new CSystem(STATE_TITLE);
+//	p_system = new CSystem(STATE_MENU_STORY);
+//	p_system = new CSystem(STATE_GAME_PLAY);
 
 	return (p_system != 0);
 }

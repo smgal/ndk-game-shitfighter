@@ -12,7 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // macro
 
-#define  LOG_TAG    "SMGAL"
+#define  LOG_TAG    "[JNI]"
 #define  LOG_D(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define  LOG_I(...)  __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define  LOG_W(...)  __android_log_print(ANDROID_LOG_WARN,  LOG_TAG, __VA_ARGS__)
@@ -171,11 +171,19 @@ void g_createBufferFromCompressedFile(const char* sz_file_name, unsigned char** 
 ////////////////////////////////////////////////////////////////////////////////
 //
 
+namespace
+{
+	bool _is_not_initialized = true;
+}
+
 //void Java_com_avej_game_dreamlime_Native_init(JNIEnv* p_env, jobject obj)
 jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_package_path, jstring sj_data_path, jstring sj_package_name, jstring sj_app_name, jobject j_system_desc)
 //jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_package_path)
 {
-	LOG_D("init()");
+	if (!_is_not_initialized)
+		return JNI_FALSE;
+
+	LOG_D("[CALL] JNI.init()");
 
 	const char* sz_package_path = p_env->GetStringUTFChars(sj_package_path, 0);
 	const char* sz_data_path = p_env->GetStringUTFChars(sj_data_path, 0);
@@ -236,12 +244,17 @@ jboolean DECLARE_JNI_FUNC(SmJNI, init)(JNIEnv* p_env, jobject obj, jstring sj_pa
 
 	glue::init();
 
+	_is_not_initialized = false;
+
 	return JNI_TRUE;
 }
 
 void DECLARE_JNI_FUNC(SmJNI, resize)(JNIEnv* p_env, jobject obj, jint width, jint height)
 {
-	LOG_D("resize(%d x %d)", width, height);
+	if (_is_not_initialized)
+		return;
+
+	LOG_D("[CALL] JNI.resize(%d x %d)", width, height);
 
 	s_window_width  = width;
 	s_window_height = height;
@@ -249,13 +262,19 @@ void DECLARE_JNI_FUNC(SmJNI, resize)(JNIEnv* p_env, jobject obj, jint width, jin
 
 void DECLARE_JNI_FUNC(SmJNI, done)(JNIEnv* p_env, jobject obj)
 {
-	LOG_D("done()");
+	if (_is_not_initialized)
+		return;
+
+	LOG_D("[CALL] JNI.done()");
 
 	glue::done();
 }
 
 void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action_type, jint param_x, jint param_y)
 {
+	if (_is_not_initialized)
+		return;
+
 	switch (action_type)
 	{
 	case app::InputEvent::TYPE_TOUCH_DOWN:
@@ -279,21 +298,30 @@ void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action_ty
 
 void DECLARE_JNI_FUNC(SmJNI, pause)(JNIEnv* p_env, jobject obj)
 {
-	LOG_D("pause()");
+	if (_is_not_initialized)
+		return;
+
+	LOG_D("[CALL] JNI.pause()");
 }
 
 void DECLARE_JNI_FUNC(SmJNI, resume)(JNIEnv* p_env)
 {
-	LOG_D("resume()");
+	if (_is_not_initialized)
+		return;
+
+	LOG_D("[CALL] JNI.resume()");
 }
 
 void DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj)
 {
+	if (_is_not_initialized)
+		return;
+
 	static int s_is_first = 1;
 
 	if (s_is_first)
 	{
-		LOG_D("render()");
+		LOG_D("[CALL] JNI.render()");
 		s_is_first = 0;
 	}
 
