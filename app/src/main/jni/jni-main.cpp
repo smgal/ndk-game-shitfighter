@@ -59,7 +59,7 @@ namespace glue
 {
 	void init(void);
 	void done(void);
-	void render(long current_tick, int width, int height);
+	bool render(long current_tick, int width, int height);
 	void onTouchPress(int id, int x, int y);
 	void onTouchRelease(int id);
 	void onKeyPress(int key);
@@ -75,7 +75,7 @@ extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, done)(JNIEnv* p_env, jobject o
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, process)(JNIEnv* p_env, jobject obj, jint action_type, jint param_x, jint param_y);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, pause)(JNIEnv* p_env, jobject obj);
 extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, resume)(JNIEnv* p_env);
-extern "C" JNIEXPORT void DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj);
+extern "C" JNIEXPORT jboolean DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -312,10 +312,10 @@ void DECLARE_JNI_FUNC(SmJNI, resume)(JNIEnv* p_env)
 	LOG_D("[CALL] JNI.resume()");
 }
 
-void DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj)
+jboolean DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj)
 {
 	if (_is_not_initialized)
-		return;
+		return JNI_FALSE;
 
 	static int s_is_first = 1;
 
@@ -327,5 +327,5 @@ void DECLARE_JNI_FUNC(SmJNI, render)(JNIEnv* p_env, jobject obj)
 
     long current_time = g_getTime();
 
-	glue::render(current_time, s_window_width, s_window_height);
+	return (glue::render(current_time, s_window_width, s_window_height)) ? JNI_TRUE : JNI_FALSE;
 }

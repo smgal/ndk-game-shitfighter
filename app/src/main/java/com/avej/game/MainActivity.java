@@ -315,7 +315,11 @@ class MainRenderer implements GLSurfaceView.Renderer
 	public void onDrawFrame(GL10 gl)
 	{
 		this.process();
-		SmJNI.render();
+
+		if (!SmJNI.render())
+		{
+			SmRes.main_activity.finish();
+		}
 	}
 
 	public void process()

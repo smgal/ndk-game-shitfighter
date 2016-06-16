@@ -18,6 +18,10 @@ static const tchar* G_TITLE_NAME = TCHAR("");
 
 static const int    G_MAX_MENU = 4;
 static const tchar* G_MENU_NAME[G_MAX_MENU] = { TCHAR(""), TCHAR(""), TCHAR(""), TCHAR("") };
+static struct
+{
+	int x1, x2, y1, y2;
+} G_MENU_BOUNDS[G_MAX_MENU];
 
 ////////////////////////////////////////////////////////////////////////////////
 // callback
@@ -39,6 +43,15 @@ namespace title
 		G_MENU_NAME[1] = GetResString(RESSTRING_TITLE_MENU2);
 		G_MENU_NAME[2] = GetResString(RESSTRING_TITLE_MENU3);
 		G_MENU_NAME[3] = GetResString(RESSTRING_TITLE_MENU4);
+
+		for (int i = 0; i < G_MAX_MENU; i++)
+		{
+			int x = 210;
+			G_MENU_BOUNDS[i].x1 = x;
+			G_MENU_BOUNDS[i].y1 = 300 + i * 24;
+			G_MENU_BOUNDS[i].x2 = G_MENU_BOUNDS[i].x1 + 220;
+			G_MENU_BOUNDS[i].y2 = G_MENU_BOUNDS[i].y1 + 24;
+		}
 
 		avej_lite::sound::CMixer& mixer = avej_lite::singleton<avej_lite::sound::CMixer>::get();
 		mixer.Load(1, "s_bang.wav");
@@ -122,6 +135,16 @@ namespace title
 					g_ChangeState(STATE_EXIT);
 					return false;
 				}
+
+				for (int i = 0; i < G_MAX_MENU; i++)
+				{
+					if (s_InRect(ti.x, ti.y, G_MENU_BOUNDS[i].x1, G_MENU_BOUNDS[i].y1, G_MENU_BOUNDS[i].x2, G_MENU_BOUNDS[i].y2))
+					{
+						s_selected_menu = i;
+						break;
+					}
+				}
+
 			}
 		}
 

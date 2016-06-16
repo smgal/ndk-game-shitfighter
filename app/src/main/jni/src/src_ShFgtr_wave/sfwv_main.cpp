@@ -10,17 +10,6 @@
 #include "sfwv_obj.h"
 #include "util_render_text.h"
 
-#include <android/log.h>
-
-////////////////////////////////////////////////////////////////////////////////
-// macro
-
-#define  LOG_TAG    "SMGAL"
-#define  LOG_D(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-#define  LOG_I(...)  __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
-#define  LOG_W(...)  __android_log_print(ANDROID_LOG_WARN,  LOG_TAG, __VA_ARGS__)
-#define  LOG_E(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-
 using namespace avej_lite;
 
 namespace miku
@@ -241,6 +230,8 @@ public:
 			// pass through
 		case PROCESS_IN:
 			{
+				assert(m_p_app);
+
 				if (!m_p_app->Process())
 				{
 					m_p_app->Release();

@@ -57,10 +57,9 @@ namespace glue
 			app_callback.Finalize();
 	}
 
-	void render(long current_tick, int width, int height)
+	bool render(long current_tick, int width, int height)
 	{
-		if (app_callback.Process)
-			app_callback.Process();
+		return (app_callback.Process) ? (app_callback.Process()) : false;
 	}
 
 	void onTouchPress(int id, int x, int y)

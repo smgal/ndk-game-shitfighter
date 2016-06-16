@@ -25,7 +25,7 @@ public class SmJNI
     //public static native boolean init(String package_path);
     public static native void done();
     public static native void resize(int w, int h);
-    public static native void render();
+    public static native boolean render();
     public static native void pause();
     public static native void resume();
     public static native void process(int action_type, int param_x, int param_y);
